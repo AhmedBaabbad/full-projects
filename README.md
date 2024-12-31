@@ -27,4 +27,3 @@ Prerequisites
     Maven (for building the project)
     IDE (Optional, e.g., IntelliJ IDEA, Eclipse)
 
-Clone the repository
