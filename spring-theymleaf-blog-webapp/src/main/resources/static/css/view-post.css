@@ -1,0 +1,54 @@
+body {
+    background-color: #f8f9fa; /* Light gray background */
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.post-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+}
+
+.post-meta p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.post-short-description {
+    font-size: 1.25rem;
+    color: #6c757d; /* Bootstrap secondary text color */
+}
+
+.post-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+hr {
+    border: 1px solid #ddd;
+}
+
+a {
+    color: #007bff;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}

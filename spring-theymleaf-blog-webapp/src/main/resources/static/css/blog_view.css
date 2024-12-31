@@ -1,0 +1,34 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #6c757d, #343a40);
+    color: white;
+    border-bottom: 5px solid #007bff;
+}
+
+.card-title a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    transition: all 0.3s ease-in-out;
+}
+
+.pagination .active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+footer {
+    background: #343a40;
+    color: #aaa;
+}
+
+footer p {
+    margin: 0;
+}

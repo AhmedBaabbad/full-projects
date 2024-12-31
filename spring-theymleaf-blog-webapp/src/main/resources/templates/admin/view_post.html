@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${post.title}"></title>
+  <!-- Bootstrap CSS -->
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+  />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/view-post.css" />
+</head>
+<body>
+<div th:replace="admin/header :: header"></div>
+<div th:replace="admin/header :: navbar"></div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="card shadow-lg">
+        <div class="card-body p-5">
+          <!-- Post Title -->
+          <h1 class="post-title" th:text="${post.title}"></h1>
+          <hr class="my-4"/>
+
+          <!-- Post Metadata -->
+          <div class="post-meta text-muted mb-4">
+            <p>
+              <strong>Created On:</strong>
+              <span th:text="${#temporals.format(post.createdOn, 'MMMM dd, yyyy hh:mm a')}"></span>
+            </p>
+            <p th:if="${!post.createdOn.equals(post.updatedOn)}">
+              <strong>Last Updated:</strong>
+              <span th:text="${#temporals.format(post.updatedOn, 'MMMM dd, yyyy hh:mm a')}"></span>
+            </p>
+          </div>
+
+          <hr />
+
+          <!-- Short Description -->
+          <h4 class="post-short-description text-secondary mb-4" th:text="${post.shortDescription}"></h4>
+
+          <!-- Post Content -->
+          <div class="post-content" th:utext="${post.content}"></div>
+
+          <!-- Social Media Share Buttons -->
+          <div class="mt-4">
+            <strong>Share:</strong>
+            <a href="#" class="btn btn-outline-primary btn-sm me-1">
+              <i class="bi bi-facebook"></i> Facebook
+            </a>
+            <a href="#" class="btn btn-outline-info btn-sm me-1">
+              <i class="bi bi-twitter"></i> Twitter
+            </a>
+            <a href="#" class="btn btn-outline-danger btn-sm">
+              <i class="bi bi-envelope"></i> Email
+            </a>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="mt-4">
+            <a th:href="@{/admin/posts}" class="btn btn-secondary">Back to Posts</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="admin/footer :: footer"></div>
+
+<!-- Bootstrap JS -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+></script>
+</body>
+</html>
