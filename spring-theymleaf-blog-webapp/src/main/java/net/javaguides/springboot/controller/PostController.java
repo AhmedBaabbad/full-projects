@@ -9,6 +9,9 @@ import net.javaguides.springboot.util.ApiUtils;
 import net.javaguides.springboot.util.Constants;
 import net.javaguides.springboot.util.SecurityUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,13 +33,17 @@ public class PostController {
 
     // create handler method, GET request and return model and view
     @GetMapping("/admin/posts")
-    public String posts(Model model) {
+    public String posts(@RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "9") int size,
+                        Model model) {
+
         String role = SecurityUtils.getRole();
-        List<PostDto> posts = null;
+        Page<PostDto> posts = null;
+        Pageable pageable = PageRequest.of(page, size);
         if(Constants.ROLE_ADMIN.equals(role)){
-            posts = postService.findAllPosts();
+            posts = postService.findAllPosts(pageable);
         }else{
-            posts = postService.findPostsByUser();
+            posts = postService.findPostsByUser(pageable);
         }
         model.addAttribute("posts", posts);
         return "/admin/posts";
@@ -68,9 +75,17 @@ public class PostController {
             model.addAttribute("post", postDto);
             return "admin/create_post";
         }
-        model.addAttribute("post", postDto);
-        postDto.setUrl(ApiUtils.getUrl(postDto.getTitle()));
-        postService.savePost(postDto);
+
+        try {
+            postDto.setUrl(ApiUtils.getUrl(postDto.getTitle()));
+            postService.savePost(postDto);
+        } catch (IllegalArgumentException ex) {
+            // Add the error message to the model
+            model.addAttribute("post", postDto);
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "admin/create_post"; // Return the same page with the error message
+        }
+
         return "redirect:/admin/post-success?action=create";
     }
 
@@ -128,8 +143,11 @@ public class PostController {
     // A method to handle the search process to gat all related posts with assigned query
     @GetMapping("/admin/posts/search")
     public String searchPosts(@RequestParam(value = "query") String query,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "9") int size,
                               Model model) {
-        List<PostDto> posts = postService.searchPosts(query);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostDto> posts = postService.searchPosts(query,pageable);
         model.addAttribute("posts", posts);
         return "admin/posts";
     }

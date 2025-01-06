@@ -2,13 +2,15 @@ package net.javaguides.springboot.service;
 
 import net.javaguides.springboot.dto.PostDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface PostService {
-    List<PostDto> findAllPosts();
+    // List<PostDto> findAllPosts();
+    Page<PostDto> findAllPosts(Pageable pageable);
     void savePost(PostDto postDto);
-    List<PostDto> findPostsByUser();
+    Page<PostDto> findPostsByUser(Pageable pageable);
 
     PostDto findPostById(Long postId);
 
@@ -18,7 +20,7 @@ public interface PostService {
 
     PostDto findPostByUrl(String postUrl);
 
-    List<PostDto> searchPosts(String query);
+    Page<PostDto> searchPosts(String query, Pageable pageable);
 
     Page<PostDto> findPaginatedPosts(int page, int size);
 }

@@ -48,7 +48,7 @@
             </div>
 
             <!-- Pagination Controls -->
-            <nav aria-label="Page navigation" class="mt-4">
+            <nav aria-label="Page navigation" class="mt-4" >
                 <ul class="pagination justify-content-center">
                     <li class="page-item"
                         th:each="i : ${#numbers.sequence(1, postsResponse.totalPages)}"
@@ -76,7 +76,10 @@
 <!-- Footer -->
 <footer class="bg-dark text-white py-4 mt-5">
     <div class="container text-center">
-        <p>&copy; 2024 Blog. All Rights Reserved.</p>
+            <strong>
+                Copyright &copy; 2024 <a href="https://github.com/AhmedBaabbad">Ahmed Baabbad</a>
+                All rights reserved.
+            </strong>
     </div>
 </footer>
 

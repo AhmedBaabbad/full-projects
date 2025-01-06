@@ -4,6 +4,8 @@ import net.javaguides.springboot.dto.CommentDto;
 import net.javaguides.springboot.dto.PostDto;
 import net.javaguides.springboot.service.PostService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,8 +55,11 @@ public class BlogController {
     // http://localhost:8080/page/search?query=java
     @GetMapping("/page/search")
     public String searchPosts(@RequestParam(value = "query") String query,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "9") int size,
                               Model model){
-        List<PostDto> postsResponse = postService.searchPosts(query);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostDto> postsResponse = postService.searchPosts(query,pageable);
         model.addAttribute("postsResponse", postsResponse);
         return "blog/view_posts";
     }

@@ -62,25 +62,52 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Pagination Controls
-
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-4"
+                 th:if="${posts.totalElements > 9}">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                         Loop through page numbers
+
+                        <!-- Previous Button -->
+                        <li class="page-item" th:classappend="${posts.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/admin/posts(page=${posts.number - 1})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- Page Numbers -->
                         <li class="page-item" th:each="i : ${#numbers.sequence(1, posts.totalPages)}"
                             th:classappend="${posts.number + 1 == i} ? 'active'">
-                            <a class="page-link" th:href="@{/admin/posts(page=${i - 1})}" th:text="${i}">1</a>
+                            <a class="page-link" th:href="@{/admin/posts(page=${i - 1})}" th:text="${i}"></a>
+                        </li>
+
+                        <!-- Next Button -->
+                        <li class="page-item" th:classappend="${posts.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/admin/posts(page=${posts.number + 1})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
                         </li>
                     </ul>
                 </nav>
-            </div> -->
-        </div>
-    </div>
-</div>
+            </div>
 
-<!-- Footer -->
+            <!-- Pagination Controls -->
+
+            <!--  <div class="d-flex justify-content-center mt-4">
+                  <nav aria-label="Page navigation">
+                      <ul class="pagination">
+                           Loop through page numbers
+                          <li class="page-item" th:each="i : ${#numbers.sequence(1, posts.totalPages)}"
+                              th:classappend="${posts.number + 1 == i} ? 'active'">
+                              <a class="page-link" th:href="@{/admin/posts(page=${i - 1})}" th:text="${i}">1</a>
+                          </li>
+                      </ul>
+                  </nav>
+              </div> -->
+          </div>
+      </div>
+  </div>
+
+  <!-- Footer -->
 <div th:replace="admin/footer :: footer"></div>
 
 <!-- Bootstrap & Icons JS -->

@@ -8,12 +8,16 @@ import net.javaguides.springboot.repository.PostRepository;
 import net.javaguides.springboot.repository.UserRepository;
 import net.javaguides.springboot.service.PostService;
 import net.javaguides.springboot.service.UserService;
+import net.javaguides.springboot.util.ApiUtils;
 import net.javaguides.springboot.util.SecurityUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static net.javaguides.springboot.mapper.PostMapper.mapToPostDto;
@@ -30,32 +34,47 @@ public class PostServiceImpl implements PostService {
         this.userRepository = userRepository;
     }
 
-    @Override
+  /*  @Override
     public List<PostDto> findAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream()
                 .map(PostMapper::mapToPostDto)
                 .collect(Collectors.toList());
+    } */
+
+    @Override
+    public Page<PostDto> findAllPosts(Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        return  posts
+                .map(post -> mapToPostDto(post));
+
     }
 
     @Override
     public void savePost(PostDto postDto) {
         String email = SecurityUtils.getCurrentUser().getUsername();
         User user = userRepository.findByEmail(email);
+        String generatedUrl = ApiUtils.getUrl(postDto.getTitle());
+        // Check if the URL already exists in the database
+        Optional<Post> existingPost = postRepository.findByUrl(generatedUrl);
+        if (existingPost.isPresent()) {
+            throw new IllegalArgumentException("Cannot save using this title because it already exists in the database: " + generatedUrl);
+        }
         Post post = PostMapper.mapToPost(postDto);
         post.setCreatedBy(user);
+        post.setUrl(generatedUrl);
         postRepository.save(post);
     }
 
     @Override
-    public List<PostDto> findPostsByUser() {
+    public Page<PostDto> findPostsByUser(Pageable pageable) {
         String email = SecurityUtils.getCurrentUser().getUsername();
         User createdBy = userRepository.findByEmail(email);
         Long userId = createdBy.getId();
-        List<Post> posts = postRepository.findPostsByUser(userId);
-        return posts.stream()
-                .map((post) -> PostMapper.mapToPostDto(post))
-                .collect(Collectors.toList());
+       // Page<Post> posts = postRepository.findPostsByUser(userId,pageable);
+        return  postRepository.findPostsByUser(userId,pageable)
+                .map(post -> mapToPostDto(post));
+
 
     }
 
@@ -86,11 +105,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> searchPosts(String query) {
-        List<Post> posts = postRepository.searchPosts(query);
+    public Page<PostDto> searchPosts(String query, Pageable pageable) {
+      /*  Page<Post> posts = postRepository.searchPosts(query, pageable);
         return posts.stream()
                 .map(PostMapper::mapToPostDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); */
+        return  postRepository.searchPosts(query, pageable)
+                .map(post -> mapToPostDto(post));
     }
 
     @Override
